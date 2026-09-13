@@ -602,8 +602,7 @@ p,
 pre,
 ul,
 .cp p {
-	margin-top: 0.6em;
-	margin-bottom: 0.6em
+	margin: 0.6em 0
 }
 
 
@@ -1668,7 +1667,6 @@ a:hover {
 
 /* 普通引用：左侧灰色竖条 + 轻微缩进 + 文本略微变灰 */
 blockquote {
-	margin: 0;
 	padding: 0.25rem 0 0.25rem 1rem;
 	border-left: 3.5px solid var(--border-color);
 	color: color-mix(in srgb, var(--text-color) 72%, transparent);

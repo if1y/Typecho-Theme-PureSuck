@@ -250,10 +250,8 @@ kbd {
 	display: inline;
 	top: -1px;
 	margin: 4px 5px;
-	padding-right: 8px;
-	padding-left: 8px;
-	font-family: ui-monospace, "JetBrains Mono", "Fira Code", SFMono-Regular, Menlo, Consolas, monospace;
-	max-width: 100%
+	padding: 0.25em 8px;
+	font-family: ui-monospace, "JetBrains Mono", "Fira Code", SFMono-Regular, Menlo, Consolas, monospace
 }
 
 /* 代码块 */
@@ -294,7 +292,8 @@ pre code {
 	border-radius: 0.4rem;
 	color: var(--text-color);
 	white-space: normal !important;
-	word-break: break-all
+	overflow-wrap: anywhere;
+	word-break: break-all !important
 }
 
 .form {

@@ -19,6 +19,7 @@
     const features = {
         showTOC: toBool(rawFeatures.showTOC, true),
         zoomUseHQ: toBool(rawFeatures.zoomUseHQ, false),
+        enablePangu: toBool(rawFeatures.enablePangu, true),
         showCaptcha: toBool(rawFeatures.showCaptcha, false)
     };
 

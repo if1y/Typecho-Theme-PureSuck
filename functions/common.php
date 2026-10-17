@@ -145,6 +145,7 @@ function getPSRuntimeConfig($archive = null)
     $features = [
         'showTOC' => psOptionEnabled($options->showTOC ?? '1', true),
         'zoomUseHQ' => psOptionEnabled($options->zoomUseHQ ?? '0', false),
+        'enablePangu' => psOptionEnabled($options->enablePangu ?? '1', true),
         'commentsRequireModeration' => psOptionEnabled($options->commentsRequireModeration ?? '0', false),
         'showCaptcha' => psOptionEnabled($options->showCaptcha ?? '0', false)
     ];
@@ -166,6 +167,7 @@ function getPSRuntimeConfig($archive = null)
         'features' => $features,
         'assets' => [
             'mediumZoom' => $options->themeUrl . '/js/lib/medium-zoom.min.js',
+            'pangu' => $options->themeUrl . '/js/lib/pangu.min.js',
             'owo' => $options->themeUrl . '/js/OwO.min.js'
         ]
     ];
@@ -578,6 +580,16 @@ function themeConfig($form)
         _t('默认关闭。开启后仅对带 data-zoom-src 的图片生效，会在点击放大时预加载高清图并再切换')
     );
     $form->addInput($zoomUseHQ);
+
+    // Pangu 排版优化
+    $enablePangu = new Typecho_Widget_Helper_Form_Element_Radio(
+        'enablePangu',
+        array('1' => _t('开启'), '0' => _t('关闭')),
+        '1',
+        _t('Pangu 排版优化'),
+        _t('默认开启。通过在中文与英文、数字、符号之间添加空格，自动优化文章正文、标题与摘要的混合排版效果')
+    );
+    $form->addInput($enablePangu);
 
     // 评论验证码功能
     $showCaptcha = new Typecho_Widget_Helper_Form_Element_Radio(

@@ -142,6 +142,14 @@
         return Boolean(scope.querySelector('#cf, .respond, .OwO[data-owo-ssr]'));
     }
 
+    function hasPanguTarget(scope) {
+        return Boolean(
+            scope.querySelector('.post-content')
+            || scope.querySelector('.post-title')
+            || scope.querySelector('.post-excerpt')
+        );
+    }
+
     function hasContentEnhanceTarget(scope) {
         return Boolean(
             scope.querySelector('.collapsible-panel')
@@ -161,6 +169,35 @@
         return loadRuntimeModule('comment').then(function (api) {
             if (!api || typeof api.init !== 'function') return null;
             return api.init(scope, context || {});
+        });
+    }
+
+    // pangu 排版优化：中英文之间自动补空格
+    // 直接调用 pangu 官方 DOM API，其内置 ignoredTags 已自动跳过 script/code/pre/textarea。
+    function getPanguScriptSrc() {
+        const fromConfig = PS.config && PS.config.assets && PS.config.assets.pangu
+            ? String(PS.config.assets.pangu)
+            : '';
+        if (fromConfig) return fromConfig;
+        return resolveModuleUrl('/js/lib/pangu.min.js');
+    }
+
+    function runPanguTask(scope, context) {
+        const features = context && context.features ? context.features : null;
+        if (features && features.enablePangu === false) return Promise.resolve(null);
+        if (!hasPanguTarget(scope)) return Promise.resolve(null);
+
+        return loadScriptOnce(getPanguScriptSrc()).then(function (ok) {
+            const pangu = window.pangu;
+            if (!ok || !pangu || typeof pangu.spacingElementByClassName !== 'function') return null;
+
+            pangu.spacingElementByClassName('post-content');
+            pangu.spacingElementByClassName('post-title');
+            pangu.spacingElementByClassName('post-excerpt');
+            return null;
+        }).catch(function () {
+            // pangu 加载失败时静默跳过，不影响其他增强功能。
+            return null;
         });
     }
 
@@ -248,6 +285,13 @@
         }, {
             delay: 0,
             timeout: 1200
+        });
+
+        schedule(function () {
+            return runPanguTask(scope, context);
+        }, {
+            delay: context && context.isSwup ? 120 : 40,
+            timeout: 1600
         });
 
         schedule(function () {
